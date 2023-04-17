@@ -30,24 +30,48 @@
     (assoc new-player :points points)))
 
 (defn player-decision-continue? [player]
-  (= (read-line) "sim"))
+  (println (:player-name player) ": mais cartas?")
+  (= (read-line) "s"))
 
 (defn dealer-decision-continue? [player-points dealer]
-  (<= (:points dealer) player-points))
+  (if (> player-points 21) false (<= (:points dealer) player-points)))
 
 (defn game [player fn-decision-continue?]
-  (println (:player-name player) ": mais cartas?")
   (if (fn-decision-continue? player)
     (let [player-with-more-cards (more-card player)]
       (card/print-player player-with-more-cards)
       (recur player-with-more-cards fn-decision-continue?))
     player))
 
-(def player-1 (player "Lu"))
+(defn end-game-message [player dealer]
+  (let [player-points (:points player)
+        player-name (:player-name player)
+        dealer-points (:points dealer)
+        dealer-name (:player-name dealer)]
+    (cond
+      (and (> player-points 21) (> dealer-points 21)) "Ninguém ganhou :`( "
+      (= player-points dealer-points) "Empateee :| "
+      (> player-points 21) (str dealer-name " ganhou!!! :`( ")
+      (> dealer-points 21) (str player-name " ganhouuu !!!! :D ")
+      (> player-points dealer-points) (str player-name " ganhouuu !!!! :D ")
+      (> dealer-points player-points) (str dealer-name " ganhou!!! :`( "))))
+
+(defn end-game [player dealer]
+  (card/print-player player)
+  (card/print-player dealer)
+ (println (end-game-message player dealer)))
+
+(defn player-name-from-prompt []
+  (println "Nome do jogador:")
+  (read-line))
+
+(def player-1 (player (player-name-from-prompt)))
 (card/print-player player-1)
 
 (def dealer (player "Dealer"))
-(card/print-player dealer)
+(card/print-masked-player dealer)
 
 (def player-after-game (game player-1 player-decision-continue?))
-(game dealer (partial dealer-decision-continue? (:points player-after-game)))
+(def partial-dealer-continue? (partial dealer-decision-continue? (:points player-after-game)))
+(def dealer-after-game (game dealer partial-dealer-continue?))
+(end-game player-after-game dealer-after-game)
