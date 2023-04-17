@@ -1,27 +1,38 @@
-# blackjack
+# Blackjack Game
+### Game Rules
+Cards **2 through 10** are worth their face value, and **face cards (jack, queen, king)** are also worth 10.
 
-A Clojure library designed to ... well, that part is up to you.
+An **ace's(A)** value is 11 unless this causes the score to exceed 21 points, in which case it is worth 1.
 
-### Regras do Jogo
-As cartas J, Q e K valem: 10 pontos
+#### Example: 
 
-A pontuação da carta A depende da mão do jogador. A carta vale 11 pontos, porém se a pontuação da mão
-do jogador passar de 21, esta carta valerá apenas 1 ponto.
+**Cards [7 K]**
 
-Exemplo: 
+    7 + K(10) = 17;
 
-cartas [A 10] => A (11 pontos) + 10 = 21;
+**Cards [A 1 9]** 
 
-cartas [A 7 5] => A (11 pontos) + 7 + 5 = 23, porém como estorou 21, a carta A vale 1, então fica: 1 + 7 + 5 = 13.  
- 
+    A (11 points) + 1 + 9 = 21;
+
+**Cards [A 7 5]** 
+
+    A (11 points) + 7 + 5 = 23 but it burst 21, the ace (A) card worth 1, so the score is: 1 + 7 + 5 = 13.  
 
 ## Usage
 
-FIXME
+<img src='./resources/img/construction.png' alt='in construction' width='100' />
+
+## Technologies
+* Clojure 1.11
+* Leiningen 2.10.0
+
+## Reference
+
+[![Blackjack Game](https://img.youtube.com/vi/f_I89ICI3x8/0.jpg)](https://www.youtube.com/watch?v=f_I89ICI3x8&list=PLcjDvROHY58MlqcAU7d0fYhAJQ-p-dMp6&index=1&ab_channel=CesarAlcancio)
 
 ## License
 
-Copyright © 2023 FIXME
+Copyright © 2023
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
