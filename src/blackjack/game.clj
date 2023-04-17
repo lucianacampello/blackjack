@@ -20,10 +20,34 @@
 (defn player [player-name]
   (let [cards [(new-card) (new-card)]
         points (points-cards cards)]
-    {:player player-name
+    {:player-name player-name
      :cards cards
      :points points}))
 
-(card/print-player (player "Lu"))
-(println (points-cards [1 10]))
-(println (points-cards [1 5 7]))
+(defn more-card [player]
+  (let [new-player (update player :cards conj (new-card))
+        points (points-cards (:cards new-player))]
+    (assoc new-player :points points)))
+
+(defn player-decision-continue? [player]
+  (= (read-line) "sim"))
+
+(defn dealer-decision-continue? [player-points dealer]
+  (<= (:points dealer) player-points))
+
+(defn game [player fn-decision-continue?]
+  (println (:player-name player) ": mais cartas?")
+  (if (fn-decision-continue? player)
+    (let [player-with-more-cards (more-card player)]
+      (card/print-player player-with-more-cards)
+      (recur player-with-more-cards fn-decision-continue?))
+    player))
+
+(def player-1 (player "Lu"))
+(card/print-player player-1)
+
+(def dealer (player "Dealer"))
+(card/print-player dealer)
+
+(def player-after-game (game player-1 player-decision-continue?))
+(game dealer (partial dealer-decision-continue? (:points player-after-game)))
